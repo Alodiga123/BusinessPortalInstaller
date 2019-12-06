@@ -1,0 +1,46 @@
+#!/bin/sh
+
+action=$1
+case $action in
+
+	"createliblinks")
+		cd $GLASSFISH_DOMAIN_DIR/lib
+		$SUDO_COMMAND ln -s $PAYMENT_JARS_DIR/PaymentCommons.jar payment_lib_PaymentCommons.jar
+	;;
+	
+    "createtplinks")
+		expresion=*.jar
+		cd $PAYMENT_THIRDPARTY_DIR/
+		for i in ls $expresion
+		do
+			if test $i != 'ls'
+			then
+				$SUDO_COMMAND ln -s $PAYMENT_THIRDPARTY_DIR/$i $GLASSFISH_DOMAIN_DIR/lib/payment_tp_$i
+			fi
+		done
+	 ;;
+	
+	"removeliblinks")
+		cd $GLASSFISH_DOMAIN_DIR/lib
+		$SUDO_COMMAND rm payment_lib_*.jar
+	;;
+	
+	"removetplinks")
+		cd $GLASSFISH_DOMAIN_DIR/lib
+		$SUDO_COMMAND rm payment_tp_*.jar
+	;;
+	
+	"updateliblinks")
+   		payment-server-web removeliblinks
+   		payment-server-web createliblinks
+    ;;
+   
+    "updatetplinks")
+   		payment-server-web removetpliblinks
+   		payment-server-web createtpliblinks
+	;;
+
+	*) 
+		echo "Unknown web-server action."
+	;;
+esac

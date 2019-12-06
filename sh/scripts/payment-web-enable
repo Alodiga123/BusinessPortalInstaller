@@ -1,0 +1,20 @@
+#!/bin/sh
+
+webmodule=$1
+case $webmodule in
+        "PaymentWS")
+                echo enabling $1...
+                $AS_ADMIN_COMMAND enable --host $PAYMENT_HOSTNAME --port 4848 --user $GLASSFISH_USER --passwordfile $GLASSFISH_PASSWORD_FILE PaymentWS
+        ;;
+        "all")
+                payment-web-enable PaymentWS
+                echo "enabling all done!"
+        ;;
+        *)
+            echo "Unknown web module."
+        ;;
+esac
+
+
+
+

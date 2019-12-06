@@ -1,0 +1,131 @@
+Imagenes
+- De acuerdo a las imágenes que se vayan a utilizar, estas deben tener el predico icon si esta vista funciona como icono, de ser otro tipo de imagen deberá tener el prefijo 		> img, ejemplo:
+	> icon-add.png
+	> img-alodiga-logo.png
+
+Menu
+- La clase encargada de crear el menú es: com.alodiga.distribution.web.custom.components.DistributionMenu.
+- Se deben agregar en com.alodiga.distribution.web.utils.Constant las constantes del menú y menu item, estas contienen los nombres de las claves que se encuentran en los properties (i3-label.properties y i3-label_es.properties).
+- Para agregar cada menu item debe agregarse al hash menuItems una entrada de la siguiente forma:
+	> menuItems.put((new Profile().getTableName()), getMenuItem(Constant.MENUITEM_ITEM, "vista.zul"));
+- Para agregar un menu se debe agregar al hashMenu la entrada con el menuItems
+	> hashMenu.put(Constant.MENU_SECURITY, menuItems);
+
+Clases java
+- Para controladores
+	> Una vista .zul tiene asociado un controlador .java, en este sentido la relación de nombres entre ellos debe ser similar al siguiente ejemplo:
+		* accountAdminView.zul -> AccountAdminViewController.java
+		* accountListView.zul -> AccountListViewController.java
+	> Cada componente de la vista con el que se vaya a interactuar del lado del servidor debe tener un id único y su nombre dependiendo del componente deben ser similar a los siguientes:
+		Window winAccountAdminView;
+		Textbox: txtName
+		Intbox: intValue
+		Label: lblInfo
+		Listbox: lbxProducts
+		Button: btnSave
+		Checkbox: cbxEnabled
+		Combobox cmbProfiles
+		Comboitem cbiProfile
+		Grid: grdName
+		Groupbox grbMultilanguage
+	  Estos son los componentes más frecuentemente usados, de necesitar otro que no esta en la lista anterior deben notificarlo al grupo y en conjunto definir el estándar que este tendrá.
+
+	> Cada información que deba ser mostrada en las vistas debe ser multilenguaje, por lo tanto en los archivos  i3-label.properties y i3-label_es.properties deben colocar el valor a mostrar en inglés y español respectivamente.
+	  Si es un valor que han de utilizar en un CRUD debe tener el siguiente formato clave=valor:
+		crud.user.list=User List
+		crud.user.add=Add User
+		crud.user.edit=Edit User
+		crud.user.view=View User
+		crud.user.data=User Data
+	  Si es una información que consideran es común para toda la aplicación debe usar el estándar:
+		common.enterprise=Enterprise
+	  Si es un error :
+		error.general=There was an error. Please try again later.
+
+	> Para agregar las funcionalidades que se mostrarán en los menús:
+		menu.security=Security
+		menu.security.profile=Profiles
+		menu.security.user=Users
+
+
+	> Las variables deben ser escritas en camelcase, en ingles y el nombre debe especificar el objeto y su función. Ej:
+		* boolean enabled;
+		* int maxValue;
+		* Product product;
+		* List<Product> products;
+		* List<Product> listProducts;
+		* ReportHasProfile reportHasprofile;
+	> Los nombres de las clases deben se escritas en camelcase con la primera letra en mayuscula, todos los controladores deben tener el mismo nombre de la vista + "Controller". Ej.: UserListViewController.java
+	> Los nombres de las funciones deben se escritas en camelcase, el nombre de la función debe describir cual es su fin. Ej: private void fillFields(){...}
+	> En los controladores de los listar:
+		* deben extender de GenericAbstractListController<T> donde T es la clase a la cual se va a administrar
+		* Deben tener la lista de objetos correspondiente parametrizada y privada. Ej: private List<user> users;
+		* Deben tener la variable adminView para el nombre de la vista admin que se va a utilizar. Ej:private String adminView = "reportAdminView.zul";
+		* En la función doAfterCompose(Component comp) llamar a 
+			- super.doAfterCompose(comp);
+			- Cargar permisos: loadPermission(new Report());
+			- initialize();
+		* La función initialize debe cargar la data comun, es decir, cargar EJB, lista de objetos y datos en la vista. Ej:
+		@Override
+		public void initialize() {
+			super.initialize();
+			userEJB = (UserEJB) EJBServiceLocator.getInstance().get(EjbConstants.USER_EJB);
+			loadPermission(new User());
+			startListener();
+			getData();
+		    	loadDataList(users);
+		}
+	> En los controladores Admin 
+		* Deben extender de GenericAbstractAdminController
+		* Deben tener de forma global y privada el objeto a mostrarse (para el caso de editar y ver). Ej: private User userParam;
+		* Crear la variable adminViewLabel con el nombre de la etiqueta del crud, estas tienen este formato: "crud.entity", donde entity es el nombre de la entidad que se esta manejando en el momento. Ej: private String adminViewLabel = "crud.product";
+		* El doAfterCompose(comp) debe contener:
+			- super.doAfterCompose(comp);
+			- Cargar el parametro proveniente de la lista: userParam = (Executions.getCurrent().getArg().get("object") != null) ? (User) Executions.getCurrent().getArg().get("object") : null;
+			- checkSession();
+			- initialize();
+			- initView(eventType, adminViewLabel, window);
+		* El intialize debe tener la siguiente estructura:
+		    public void initialize() {
+		    	super.initialize();
+			// CARGAR EJB's
+		    }
+- Para EJB
+	> Para cada implementación de un Ejb deben haber dos interfaces contenedoras de las firmas de los métodos, una con la anotación @Remote y otra con la anotación @Local, los nombres de las interfaces y de los Ejbs que las implementan deben ser similares a los siguientes:
+		* AccessControlEJB (Interfaz remota)
+		* AccessControlEJBLocal (interfaz local)
+		* AccessControlEJBImp (Implementación del Ejb)
+
+	> Firma de métodos,
+		* Todos los métodos, deben deben comenzar en minúscula y si está compuesto por varias palabras deben usar formato camelCase, ejemplo:
+		public List<Product> getProductByEnterprise(EJBRequest request){
+			......
+		}
+	> Para el envio y recepción de parámetros se debe utilizar un objeto EJBRequest, este tiene diferentes atributos que deben ser cargados antes de enviarlo como parámetro al método, ejemplo:
+		Map<String, Object> params = new HashMap<String, Object>(); //Para el caso que necesiten varios valores.
+		params.put(QueryConstants.PARAM_ENTERPRISE_ID, 1L);
+		request.setFirst(0);
+		request.setLimit(3);
+		request.setParams(params);
+		productEJB.getProductByEnterprise(request);
+
+	> El objeto request contiene los datos necesarios para auditar las acciones del usuario, pues contiene el atributo auditData que puede ser llenado desde el controlador desde el cual se llama en método del Ejb.
+
+
+Otros Estandares y recomendaciones
+- Cuidar las tabulaciones. Cada segmento de codigo debe estar bien identado, de forma que el código se vea legible. Si son usuarios de NetBeans, configurarlo para que idente con tabulaciones de tamaño 4 espacios y no con espacios solos.
+- No dejar muchos espacios en blanco entre lineas de código.
+- Al subir al CVS se debe comentar que cambios se realizaron, de forma corta y precisa
+- La sincronización con el CVS deben estar sin errores y probados con la versión que esten en el momento en el CVS, es decir, se debe actualizar y probar antes de subir algun cambio
+- Para cambios menores, como el nombre de una variable, una etiqueta, espacios, solo montarlos cuando se realice una actualización de mayor magnitud (Ej: una vista con controlador terminado, un metodo de EJB, constantes). Esto para no tener cambios constantes y pequeños, sólo cuando sea necesario y de importancia.
+- Al incio de cada clase se debe tener quien fue el creador y quien modificó la clase, con fecha y cambio. Ej:
+	Author: Julio
+	Modified:
+	# Pepe  12-03-2012 Cambio en la firma del metodo getProducts() por getProducts(int EnterpriseId)
+- Al realizarse algun cambio en la base de datos, se debe agregar el script del cambio (alter table, create, delete, insert, update) al database.sql del release del proyecto DistributionInstallers. Adicional, probar el script antes de subir, agregar que se usa el nombre de la base de dato a la sentencia.
+- Cuando dos o mas personas realicen cambios sobre una misma clase se debe realizar de forma modular, evitando que dos toquen la misma linea de codigo o conciliar en el cambio de un segmente común. A la vez, al momento de sincronizar con el CVS evitar realizarlo en paralelo, hacerlo uno por uno, para evitar sobreescribir código o tener una versión con errores.
+- Al agregar metódos nuevos, se deben agregar al final del segmento de funciones de la clase
+- Al agregar variables nuevas, se deben agregar al final del segmento de variables de la clase
+- Al agregar los properties, se deben agregar al final del segmento de properties al que pertenezca. Los properies son i3-label.properties y i3-label_es.properties.
+
+

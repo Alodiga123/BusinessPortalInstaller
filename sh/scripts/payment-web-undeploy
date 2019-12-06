@@ -1,0 +1,30 @@
+#!/bin/sh
+
+webmodule=$1
+case $webmodule in
+
+	"PaymentWS")
+                echo undeploying $1...
+		$AS_ADMIN_COMMAND undeploy --host $PAYMENT_HOSTNAME --port 4848 --user $GLASSFISH_USER --passwordfile $GLASSFISH_PASSWORD_FILE PaymentWS
+	;;
+	"PaymentWeb")
+                echo undeploying $1...
+		$AS_ADMIN_COMMAND undeploy --host $PAYMENT_HOSTNAME --port 4848 --user $GLASSFISH_USER --passwordfile $GLASSFISH_PASSWORD_FILE PaymentWeb
+	;;
+	"allwar")
+   		payment-web-undeploy PaymentWeb
+   		echo "undeploy all jars done!"
+	;;
+	 "alljar")
+                payment-web-undeploy PaymentWS
+   		echo "undeploy all wars done!"
+	;;
+	 "all")
+   		payment-web-undeploy alljar
+   		payment-web-undeploy allwar
+   		echo "undeploy all done!"
+	;;
+        *)
+            echo "Unknown web module."
+	;;
+esac

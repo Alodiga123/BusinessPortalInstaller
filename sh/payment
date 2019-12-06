@@ -1,0 +1,127 @@
+#!/bin/sh
+
+export PATH=$PATH:$INTERAX_TELEPHONY_SH_DIR/scripts
+export PATH=$PATH:$PAYMENT_SH_DIR/scripts
+
+. interaxtelephony-enviroment
+. payment-enviroment
+
+moduletype=$1
+case $moduletype in
+
+	"server")
+		servertype=$2
+		case $servertype in
+		
+		   "db")
+				action=$3
+				payment-server-db $action
+			;;
+			
+		    "linux")
+				action=$3
+				payment-server-linux $action
+			;;
+			
+			"web")
+				action=$3
+				payment-server-web $action
+			;;		
+			
+		   *) 
+				echo "Unknown server type."
+			;;
+		esac
+	;;
+	
+   "web")
+		webaction=$2
+		echo "AS_ADMIN_PASSWORD=$GLASSFISH_PASSWORD" > $GLASSFISH_PASSWORD_FILE
+		case $webaction in
+		
+		   "copy")
+				webmodule=$3
+				websection=$4
+				payment-web-copy $webmodule $websection
+			;;
+			
+			"deploy")
+				webmodule=$3
+				payment-web-deploy $webmodule
+			;;
+			
+		    "redeploy")
+				webmodule=$3
+				payment-web-redeploy $webmodule
+			;;
+			
+		    "reload")
+				webmodule=$3
+				payment-web-reload $webmodule
+			;;
+			
+			"undeploy")
+				webmodule=$3
+				payment-web-undeploy $webmodule
+			;;
+			
+			"disable")
+				webmodule=$3
+				payment-web-disable $webmodule
+			;;
+
+			"enable")
+                webmodule=$3
+                payment-web-enable $webmodule
+            ;;
+
+			"renable")
+                webmodule=$3
+                payment-web-renable $webmodule
+            ;;
+		   *) 
+				echo "Unknown web action."
+			;;
+		esac
+		rm $GLASSFISH_PASSWORD_FILE
+	;;
+
+ 	"system")
+		appaction=$2
+		case $appaction in
+		
+		   	"changeversion")
+				action=$3
+				payment-system-changeversion $action
+			;;
+			
+			"configure")
+				action=$3
+				section=$4
+				payment-system-configure $action $section
+			;;
+			
+			"restart")
+				action=$3
+				payment-system-stop $action
+				payment-system-start $action
+			;;
+
+			"start")
+ 				action=$3
+ 				payment-system-start $action
+			;;
+
+			"stop")
+				action=$3
+				payment-system-stop $action
+			;;
+		   *) 
+				echo "Unknown configure action."
+			;;
+		esac
+	;;	
+   *) 
+		echo "Unknown module type."
+	;;
+esac

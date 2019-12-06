@@ -1,0 +1,19 @@
+#!/bin/sh
+
+webmodule=$1
+case $webmodule in
+        "PaymentWS")
+                echo disabling $1...
+                payment-web-disable PaymentWS
+                echo enabling $1...
+                payment-web-enable PaymentWS
+        ;;
+        "all")
+                payment-web-renable PaymentWS
+                echo "renabling all done!"
+        ;;
+        *)
+            echo "Unknown web module."
+        ;;
+esac
+

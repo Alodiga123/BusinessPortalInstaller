@@ -1,0 +1,24 @@
+#!/bin/sh
+# ----------------------------------------------
+# PAYMENT
+# ----------------------------------------------
+export PAYMENT_VERSION=head
+export PAYMENT_HOSTNAME=$INTERAX_TELEPHONY_HOSTNAME
+
+export PAYMENT_BASE_DIR=$ALODIGA_BASE_DIR/payment/$PAYMENT_VERSION
+export PAYMENT_SERVERS_DIR=$INTERAX_TELEPHONY_SERVERS_DIR
+export PAYMENT_LIBS_DIR=$PAYMENT_BASE_DIR/lib
+#export PAYMENT_WARS_DIR=$PAYMENT_BASE_DIR/war
+export PAYMENT_THIRDPARTY_DIR=$PAYMENT_LIBS_DIR/thirdparty
+export PAYMENT_JARS_DIR=$PAYMENT_LIBS_DIR/payment
+export PAYMENT_WARS_DIR=$PAYMENT_LIBS_DIR/payment
+export PAYMENT_LOGS_DIR=$ALODIGA_LOGS_DIR/payment/$PAYMENT_VERSION
+export PAYMENT_SRC_DIR=$ALODIGA_SRC_DIR/payment/$PAYMENT_VERSION
+export PAYMENT_SRC_INSTALLER_DIR=$PAYMENT_SRC_DIR/PaymentInstallers
+
+# ----------------------------------------------
+# MYSQL
+# ----------------------------------------------
+export PAYMENT_DB_USER=payment
+export PAYMENT_DB_PASSWORD=p4ym3nt
+export PAYMENT_DB_NAME=payment

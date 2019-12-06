@@ -1,0 +1,33 @@
+#!/bin/sh
+
+webmodule=$1
+case $webmodule in
+
+	"PaymentWS")
+                echo reloading $1...
+		$SUDO_COMMAND touch $GLASSFISH_DOMAIN_DIR/applications/j2ee-modules/PaymentWS/.reload
+	;;
+	"PaymentWeb")
+                echo reloading $1...
+		$SUDO_COMMAND touch $GLASSFISH_DOMAIN_DIR/applications/j2ee-modules/PaymentWeb/.reload
+	;;
+
+	 "allwar")
+   		payment-web-reload PaymentWeb
+
+   		echo "undeploy all wars done!"
+	;;
+	"alljar")
+        payment-web-reload PaymentWS
+   		echo "undeploy all jars done!"
+	;;
+	 "all")
+   		payment-web-reload alljar
+   		payment-web-reload allwar
+   		echo "undeploy all done!"
+	;;
+        *)
+		echo "Unknown web module."
+	;;
+	
+esac

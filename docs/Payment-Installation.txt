@@ -1,0 +1,139 @@
+*********************************************************************************************************************
+                                                                            PASOS PARA INSTALAR EL SISTEMA MULTI_LEVEL_CHANNEL
+*********************************************************************************************************************
+
+
+*********************************************************************************************************************
+A.- INDICE:
+*********************************************************************************************************************
+1.- Copia de los archivos de instalación al servidor
+	a) Ambiente de desarrollo
+	b) Ambiente de producción
+2.- Configuración de variables de entorno del MultiLevelChannel
+	a) Personalización de variables de entorno
+	b) Agregar scripts del MultiLevelChannel al PATH
+3.- Instalación de Servidores, Aplicaciones y Bibliotecas de terceros
+	a) Creación de directorios
+4.- Instalación de Bases de Datos del MultiLevelChannel
+	a) Instalación completa
+	b) Añadir nuevos
+5.- Instalación de Aplicaciones Web del MULTI_LEVEL_CHANNEL
+
+*********************************************************************************************************************
+B.- CONTENIDO:
+*********************************************************************************************************************
+
+1.- Copia de los archivos de instalación al servidor
+---------------------------------------------------------------------------------------------------------------------
+a) Ambiente de desarrollo:
+	- Descargar y configurar ambiente de desarrollo de MultiLevelChannel. Seguir los pasos descritos en el documento: MultiLevelChannel-Workspace.txt
+	- Crear enlaces simbólicos hacia el workspace:
+
+		> cd /usr/src/alodiga
+		> sudo mkdir payments
+		> cd payments
+                Eclipse:
+                
+                    > sudo ln -s <WORKSPACE_DIR> <VERSION>
+                    > sudo ln -s <VERSION> default
+                Netbeans
+                    > sudo ln -s <WORKSPACE_DIR>/multilevelchannel <VERSION>
+                    > sudo ln -s <VERSION> default
+
+	- Empaquetar todos los jars y wars necesarios para el funcionamiento del sistema
+	- Seguir la instrucciones del punto 2
+
+
+b) Ambiente de producción:
+	- TODO
+
+---------------------------------------------------------------------------------------------------------------------
+2.- Configuración de la instalación
+---------------------------------------------------------------------------------------------------------------------
+
+a) Personalización de variables de entorno:
+	- Abrir el archivo de variables de ambiente con un editor de texto:
+		> sudo vim /usr/src/alodiga/payment/default/PaymentInstallers/sh/scripts/payment-enviroment
+	- Editar las siguientes variables según sea necesario:
+		- PAYMENT_CHANNEL_VERSION
+	- Guardar el archivo
+
+b) Edición del archivo bashrc:
+	- Abrir el archivo bashrc con un editor de texto:
+		> sudo vim ~/.bashrc o /etc/bashrc
+	- Agregar las siguientes líneas al final del archivo:
+                -export ALODIGA_PAYMENT_SH_DIR=/usr/src/alodiga/payment/default/PaymentInstallers/sh
+                -export PATH=$PATH:$ALODIGA_PAYMENT_SH_DIR
+		
+	- Guardar el archivo
+	- Hacer ejecutables los scripts de payment
+		> chmod +x /usr/src/alodiga/payment/default/PaymentInstallers/sh/payment
+		> chmod +x /usr/src/alodiga/payment/default/PaymentInstallers/sh/scripts/*
+
+---------------------------------------------------------------------------------------------------------------------
+3.- Instalación de Servidores, Aplicaciones y Bibliotecas de terceros
+---------------------------------------------------------------------------------------------------------------------
+
+a) Creación de directorios:
+	- Si se tiene instalada la versión en cuestión, eliminar primero los directorios antiguos mediante el comando
+		> payment server linux deletedirs
+
+    - Para crear los directorios base del sistema, utilizar el siguiente script:
+        > payment server linux createdirs
+
+	- Crear enlaces simbólicos a la versión por defecto
+		> payment system changeversion <VERSION>
+
+	- Para copiar todos los jar ( multilevelchannel y thirdparty) del workspace al directorio de multilevelchannel, utilizar el script:
+		> payment server linux copylibs //TODO voy por aqui
+		
+	- Para copiar todos los war del workspace al directorio de multilevelchannel, utilizar el script:
+		> payment server linux copywars
+
+
+	- Para actualizar todos los jar (multilevelchannel y thirdparty), utilizar el script:
+		> payment server linux updatelibs
+		
+	- Para actualizar todos los war, utilizar el script:	
+		> payment server linux updatewars
+
+
+---------------------------------------------------------------------------------------------------------------------
+4.- Instalación de Bases de Datos del payment
+---------------------------------------------------------------------------------------------------------------------
+
+a) Configuración de la base de datos en el sistema, utilizar el script e introducir los datos requeridos:
+	> payment system configure mysql
+
+
+---------------------------------------------------------------------------------------------------------------------
+5.- Instalación de Aplicaciones Web del payment
+---------------------------------------------------------------------------------------------------------------------
+
+a) Configuración del nuevo domain en el servidor glassfish, utilizar el script e introducir los datos requeridos:
+	> payment system configure glassfish
+
+b) Para crear los enlaces simbólicos del servidor web, utilizar los scripts:
+	> payment server web createliblinks
+	> payment server web createtplinks
+
+c) Reiniciar el servidor web mediante el script:
+        interaxtelephony server web restart
+
+d) Para realizar deploy de toda la aplicación, utilizar el script:
+	> payment web deploy <nombre_modulo>
+	para todos los jar:
+	> payment web deploy alljar
+        para todos los war:
+	> payment web deploy allwar
+        para todos:
+	> payment web deploy all
+
+(ACTUALIZAR) Si se necesita actualizar un cambio en el servidor web, utilizar el script:
+	multilevelchannel web redeploy <nombre_modulo>
+para todos los jar:
+	> payment web redeploy alljar
+        para todos los war:
+	> payment web redeploy allwar
+        para todos:
+	> payment web redeploy all

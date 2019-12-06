@@ -1,0 +1,389 @@
+=============================================================================================
+0.- Requisitos
+=============================================================================================
+> Tener instalado el Workspace de InteraxTelephony
+	- Seguir las instruccions del archivo "InteraxTelephony-Workspace.txt"
+
+> Utilizar el Workspace creado en el paso anterior para el proyecto Alodiga:
+	- Eclipse:
+		- Workingsets: 
+			- Integrations
+			- MultiLevelChannel
+	- Netbeans
+		- Crear ProjectGroup
+                        -Integrations
+                        -MultiLevelChannel
+	
+> Configurar el entorno de desarrollo para utilizar el JRE de InteraxTelephony	
+
+	- Eclipse: 
+		- Configurar todos los proyectos para utilizar el JRE por defecto
+	- Netbeans
+                - Configurar todos los proyectos para utilizar el JRE por defecto
+		
+==============================================================================================
+
+
+
+==============================================================================================
+1.- Crear los siguientes repositorios:
+==============================================================================================
+
+NOMBRE				SERVIDOR			RUTA
+---------------------------------------------------------------------------------------------
+MultiLevelChannel				cvs.interaxmedia.com		/cvs/alodiga/multilevelchannel
+
+=============================================================================================
+
+
+
+=============================================================================================
+2.- Hacer checkout del proyecto MultiLevelChannelInstallers
+=============================================================================================
+
+Project:			MultiLevelChannelInstallers
+Description:        ---
+Repository:			MultiLevelChannel
+Type:				Project
+Context Path:       ---
+
+Java Build Path:
+- Source Folder:	---
+- Output Folder:	---
+- Output File:		---
+- Proyects:			---
+- Add Jars:			---
+- User Libraries:	---
+
+=============================================================================================
+
+
+
+=============================================================================================
+3.- Crear las bibliotecas de usuario
+=============================================================================================
+Eclipse:
+	Nombre:		MultiLevelChannel Third Party Libraries
+	Jars:		- /usr/src/alodiga/multilevelchannel/<VERSION>/MultiLevelChannelInstallers/lib/thirdparty/*.jar
+
+---------------------------------------------------------------------------------------------
+Netbeans:
+    Nombre:		MultiLevelChannel_ThirdParty_Libraries
+    Jars:		- /usr/src/alodiga/multilevelchannel/<VERSION>/MultiLevelChannelInstallers/lib/thirdparty/*.jar
+
+=============================================================================================
+
+
+
+
+=============================================================================================
+5.- Proyectos del repositorio MultiLevelChannel
+=============================================================================================
+
+Project:				UtilsEJB
+Description:				---
+Repository:				MultiLevelChannel
+Type:					Java Web Project
+Context Path:				/UtilsEJB
+
+Java Build Path:
+- Source Folder:	src
+- Output Folder:	build/classes
+- Output File:		MultiLevelChannelInstallers/lib/UtilsEJB.jar
+- Projects:         - InteraxLibraries
+					- InteraxTelephonyCommons
+                    - MultiLevelChannelCommons
+- Add Jars:         ---
+- User Libraries:	- InteraxTelephony Glassfish Libraries
+					- InteraxTelephony JRE
+					- InteraxTelephony ThirdParty Libraries
+					- MultiLevelChannel ThirdParty Libraries
+					
+
+					
+-----------------------------------------------------------------------------------------------
+Project:				AccessControlEJB
+Description:				---
+Repository:				MultiLevelChannel
+Type:					Java Web Project
+Context Path:				/AccessControlEJB
+
+Java Build Path:
+- Source Folder:	src
+- Output Folder:	build/classes
+- Output File:		MultiLevelChannelInstallers/lib/AccessControlEJB.jar
+- Projects:             - InteraxLibraries
+                        - InteraxTelephonyCommons
+                        - MultiLevelChannelCommons
+- Add Jars:          ---
+- User Libraries:	- InteraxTelephony Glassfish Libraries
+					- InteraxTelephony JRE
+					- InteraxTelephony ThirdParty Libraries
+					- MultiLevelChannel ThirdParty Libraries
+					
+
+-----------------------------------------------------------------------------------------------
+
+Project:				UserEJB
+Description:				---
+Repository:				MultiLevelChannel
+Type:					Java Web Project
+Context Path:				/UserEJB
+
+Java Build Path:
+- Source Folder:	src
+- Output Folder:	build/classes
+- Output File:		MultiLevelChannelInstallers/jar/UserEJB.jar
+- Projects:             - InteraxLibraries
+			- InteraxTelephonyCommons
+                        - MultiLevelChannelCommons
+- Add Jars:         ---
+- User Libraries:	- InteraxTelephony Glassfish Libraries
+					- InteraxTelephony JRE
+					- InteraxTelephony ThirdParty Libraries
+					- MultiLevelChannel ThirdParty Libraries
+					
+					
+-----------------------------------------------------------------------------------------------
+
+
+
+Project:				TransactionEJB
+Description:				---
+Repository:				MultiLevelChannel
+Type:					Java Web Project
+Context Path:				/TransactionEJB
+
+Java Build Path:
+- Source Folder:	src
+- Output Folder:	build/classes
+- Output File:		MultiLevelChannelInstallers/lib/TransactionEJB.jar
+- Projects:             - InteraxLibraries
+                        - InteraxTelephonyCommons
+                        - MultiLevelChannelCommons
+- Add Jars:         ---
+- User Libraries:	- InteraxTelephony Glassfish Libraries
+					- InteraxTelephony JRE
+					- InteraxTelephony ThirdParty Libraries
+					- MultiLevelChannel ThirdParty Libraries
+					
+					
+-----------------------------------------------------------------------------------------------
+
+Project:				ReportEJB
+Description:				---
+Repository:				MultiLevelChannel
+Type:					Java Web Project
+Context Path:				/ReportEJB
+
+Java Build Path:
+- Source Folder:	src
+- Output Folder:	build/classes
+- Output File:		MultiLevelChannelInstallers/lib/ReportEJB.jar
+- Projects:             - InteraxLibraries
+                        - InteraxTelephonyCommons
+                        - MultiLevelChannelCommons
+- Add Jars:         ---
+- User Libraries:	- InteraxTelephony Glassfish Libraries
+					- InteraxTelephony JRE
+					- InteraxTelephony ThirdParty Libraries
+					- MultiLevelChannel ThirdParty Libraries
+					
+					
+-----------------------------------------------------------------------------------------------
+
+Project:				ProductEJB
+Description:				---
+Repository:				MultiLevelChannel
+Type:					Java Web Project
+Context Path:				/ProductEJB
+
+Java Build Path:
+- Source Folder:	src
+- Output Folder:	build/classes
+- Output File:		MultiLevelChannelInstallers/lib/ProductEJB.jar
+- Projects:             - InteraxLibraries
+                        - InteraxTelephonyCommons
+                        - MultiLevelChannelCommons
+- Add Jars:        	---
+- User Libraries:	- InteraxTelephony Glassfish Libraries
+					- InteraxTelephony JRE
+					- InteraxTelephony ThirdParty Libraries
+					- MultiLevelChannel ThirdParty Libraries
+					
+					
+-----------------------------------------------------------------------------------------------
+
+Project:				TroubleTicketEJB
+Description:				---
+Repository:				MultiLevelChannel
+Type:					Java Web Project
+Context Path:				/TroubleTicketEJB
+
+Java Build Path:
+- Source Folder:	src
+- Output Folder:	build/classes
+- Output File:		MultiLevelChannelInstallers/lib/TroubleTicketEJB.jar
+- Projects:             - InteraxLibraries
+                        - InteraxTelephonyCommons
+                        - MultiLevelChannelCommons
+- Add Jars:         ---
+- User Libraries:	- InteraxTelephony Glassfish Libraries
+					- InteraxTelephony JRE
+					- InteraxTelephony ThirdParty Libraries
+					- MultiLevelChannel ThirdParty Libraries
+					
+					
+-----------------------------------------------------------------------------------------------
+
+Project:				SolictudeEJB
+Description:				---
+Repository:				MultiLevelChannel
+Type:					Java Web Project
+Context Path:				/SolictudeEJB
+
+Java Build Path:
+- Source Folder:	src
+- Output Folder:	build/classes
+- Output File:		MultiLevelChannelInstallers/lib/SolictudeEJB.jar
+- Projects:             - InteraxLibraries
+                        - InteraxTelephonyCommons
+                        - MultiLevelChannelCommons
+- Add Jars:          ---
+- User Libraries:	- InteraxTelephony Glassfish Libraries
+					- InteraxTelephony JRE
+					- InteraxTelephony ThirdParty Libraries
+					
+
+-----------------------------------------------------------------------------------------------
+
+Project:				PreferencesEJB
+Description:				---
+Repository:				MultiLevelChannel
+Type:					Java Web Project
+Context Path:				/PreferencesEJB
+
+Java Build Path:
+- Source Folder:	src
+- Output Folder:	build/classes
+- Output File:		MultiLevelChannelInstallers/lib/PreferencesEJB.jar
+- Projects:             - InteraxLibraries
+                        - InteraxTelephonyCommons
+                        - MultiLevelChannelCommons
+- Add Jars:          ---
+- User Libraries:	- InteraxTelephony Glassfish Libraries
+					- InteraxTelephony JRE
+					- InteraxTelephony ThirdParty Libraries
+					- MultiLevelChannel ThirdParty Libraries
+					
+
+-----------------------------------------------------------------------------------------------
+
+Project:				ClientEJB
+Description:				---
+Repository:				MultiLevelChannel
+Type:					Java Web Project
+Context Path:				/ClientEJB
+
+Java Build Path:
+- Source Folder:	src
+- Output Folder:	build/classes
+- Output File:		MultiLevelChannelInstallers/lib/ClientEJB.jar
+- Projects:             - InteraxLibraries
+                        - InteraxTelephonyCommons
+                        - MultiLevelChannelCommons
+- Add Jars:         ---
+- User Libraries:	- InteraxTelephony Glassfish Libraries
+					- InteraxTelephony JRE
+					- InteraxTelephony ThirdParty Libraries
+					- MultiLevelChannel ThirdParty Libraries
+					
+-----------------------------------------------------------------------------------------------
+
+Project:				SMSIntegrationEJB
+Description:				---
+Repository:				MultiLevelChannel
+Type:					Java Web Project
+Context Path:				/SMSIntegrationEJB
+
+Java Build Path:
+- Source Folder:	src
+- Output Folder:	build/classes
+- Output File:		MultiLevelChannelInstallers/lib/SMSIntegrationEJB.jar
+- Projects:             - InteraxLibraries
+			- MultiLevelChannelCommons
+- Add Jars:          ---
+- User Libraries:	- InteraxTelephony Glassfish Libraries
+					- InteraxTelephony JRE
+					- InteraxTelephony ThirdParty Libraries
+					- MultiLevelChannel ThirdParty Libraries
+					
+-----------------------------------------------------------------------------------------------
+
+Project:				NotificationEJB
+Description:				---
+Repository:				MultiLevelChannel
+Type:					Java Web Project
+Context Path:				/NotificationEJB
+
+Java Build Path:
+- Source Folder:	src
+- Output Folder:	build/classes
+- Output File:		MultiLevelChannelInstallers/lib/NotificationEJB.jar
+- Projects:             - InteraxLibraries
+                        - InteraxTelephonyCommons
+                        - MultiLevelChannelCommons
+- Add Jars:         ---
+- User Libraries:	- InteraxTelephony Glassfish Libraries
+					- InteraxTelephony JRE
+					- InteraxTelephony ThirdParty Libraries
+					- MultiLevelChannel ThirdParty Libraries
+					
+-----------------------------------------------------------------------------------------------
+
+Project:				MultiLevelChannelCommons
+Description:            ---
+Repository:				MultiLevelChannel
+Type:					Java Project
+Context Path:           ---
+
+Java Build Path:
+- Source Folder:	src
+- Output Folder:	build
+- Output File:		MultiLevelChannelInstallers/lib/multilevelchannel/MultiLevelChannelCommons.jar
+- Projects:             - AuthorizeNetIntegration
+                        - InteraxLibraries
+                        - InteraxTelephonyCommons
+                        - UPSIntegration
+- Add Jars:		---
+- User Libraries:	- InteraxTelephony Glassfish Libraries
+					- InteraxTelephony JRE
+					- InteraxTelephony ThirdParty Libraries
+					- MultiLevelChannel ThirdParty Librariess
+
+
+
+-----------------------------------------------------------------------------------------------
+
+Project:				MultiLevelChannelWEB
+Description:				---
+Repository:				MultiLevelChannel
+Type:					Java Web Project
+Context Path:				/
+
+Java Build Path:
+- Source Folder:	src
+- Output Folder:	build/classes
+- Output File:		MultiLevelChannelInstallers/war/MultiLevelChannelWEB.war
+- Projects:             - InteraxLibraries
+                        - InteraxTelephonyCommons
+                        - MultiLevelChannelCommons
+- Add Jars:         ---
+- User Libraries:	- InteraxTelephony Glassfish Libraries
+					- InteraxTelephony JRE
+					- InteraxTelephony ThirdParty Libraries
+					- MultiLevelChannel ThirdParty Libraries
+					- Web App Libraries (WebContent/WEB-INF/lib)
+					
+
+

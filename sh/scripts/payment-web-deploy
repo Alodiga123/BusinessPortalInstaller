@@ -1,0 +1,39 @@
+#!/bin/sh
+
+webmodule=$1
+case $webmodule in
+		
+
+        "paymentWS")
+            echo Deploying $1...
+            echo $PAYMENT_WARS_DIR
+        $AS_ADMIN_COMMAND deploy --host $PAYMENT_HOSTNAME --port 4848 --user $GLASSFISH_USER --passwordfile $GLASSFISH_PASSWORD_FILE --name PaymentWS --force=false $PAYMENT_JARS_DIR/PaymentWS.jar
+	;;
+	"paymentWeb")
+                echo Deploying $1...
+                echo $PAYMENT_WARS_DIR
+		$AS_ADMIN_COMMAND deploy --host $PAYMENT_HOSTNAME --port 4848 --user $GLASSFISH_USER --passwordfile $GLASSFISH_PASSWORD_FILE --name PaymentWeb --contextroot /PaymentWeb --force=false $PAYMENT_WARS_DIR/PaymentWeb.war
+	;;
+	
+	"alljar")
+   		payment-web-deploy PaymentWS
+        echo "deploy all jars done!"
+	;;
+	"allwar")
+   		payment-web-deploy paymentWeb
+   		echo "deploy all wars done!"
+	;;
+	
+	"all")
+   		payment-web-deploy alljar
+   		payment-web-deploy allwar
+   		echo "deploy all done!"
+	;;
+	
+        *)
+            echo "Unknown web module."
+        ;;
+esac
+
+
+

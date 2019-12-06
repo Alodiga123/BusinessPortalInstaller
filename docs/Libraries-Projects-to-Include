@@ -1,0 +1,48 @@
+================================================================================
+0.- Descripción
+================================================================================
+
+Aqui se especifican las librerias a incluir en los proyectos de MultiLevelChannel.
+
+================================================================================
+1: MultiLevelChannelCommons
+================================================================================
+Librerias:
+InteraxTelephony_Glassfish_Libraries
+InteraxTelephony_ThirdParty_Libraries
+MultiLevelChannel_ThirdParty_Libraries
+================================================================================
+Proyectos:
+SmsTelintelIntegration
+SmsMlatIntegration
+================================================================================
+================================================================================
+2: MultiLevelChannelEJB
+================================================================================
+Librerias:
+InteraxTelephony_ThirdParty_Libraries
+InteraxTelephony_Glassfish_Libraries
+MultiLevelChannel_ThirdParty_Libraries
+================================================================================
+Proyectos:
+MultiLevelChannelCommons
+EasyCallSoapIntegration
+SmsTelintelIntegration
+SmsMlatIntegration
+TransferToTopUpIntegration
+SisacCommons
+InteraxTelephonyCommons
+================================================================================
+================================================================================
+3: MultiLevelChannelWeb
+================================================================================
+Librerias:
+InteraxTelephony_ThirdParty_Libraries
+MultiLevelChannel_ThirdParty_Libraries
+MultiLevelChannel_Zk_Libraries(Incluir en el proyecto)
+================================================================================
+Proyectos:
+MultiLevelChannelCommons
+SisacCommons
+InteraxTelephonyCommons
+================================================================================

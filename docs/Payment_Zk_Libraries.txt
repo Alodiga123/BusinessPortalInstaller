@@ -1,0 +1,50 @@
+================================================================================
+0.- Descripción
+================================================================================
+
+Aqui se especifican las versiones de las bibliotecas de terceros utilizadas en los
+proyectos del MULTI_LEVEL_CHANNEL.
+
+================================================================================
+================================================================================
+1.- Bibliotecas: MultiLevelChannel_Zk_Libraries
+================================================================================
+Ubicación:
+MultiLevelChannelInstallers/lib/thirdparty/zk
+
+Nombres
+--------------------------------------------------------------------------------
+breeze.jar
+bsh.jar
+ckez.jar
+fckez.jar
+Filters.jar
+gmapsz.jar
+groovy.jar
+itext.jar
+jasperreports.jar
+jcommon.jar
+jfreechart.jar
+jruby.jar
+js.jar
+junit.jar
+jxl.jar
+jython.jar
+mvel.jar
+ognl.jar
+sapphire.jar
+silvertail.jar
+timelinez.jar
+timeplotz.jar
+zcommon.jar
+zcommons-el.jar
+zhtml.jar
+zkex.jar
+zk.jar
+zkplus.jar
+zml.jar
+zul.jar
+zuljsp.jar
+zweb.jar
+
+================================================================================

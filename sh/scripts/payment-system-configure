@@ -1,0 +1,91 @@
+#!/bin/sh
+
+
+toUpper() {
+  echo $1 | tr  "[:lower:]" "[:upper:]"
+}
+firstCharUpper() {
+  PARAM=$1
+  AUX=$(echo $PARAM | awk  '{ AUX=substr($1, 1, 1); print AUX; }' )
+  LENGTH=${#PARAM}
+  AUX2=$(echo $PARAM | awk -v var=$LENGTH '{ AUX2=substr($1, 2, var - 1); print AUX2; }')
+  FIRST=`toUpper $AUX`
+  echo $FIRST$AUX2
+}
+module=$1
+case $module in
+	"glassfish")
+                echo "Configuring Glassfish"
+                echo "AS_ADMIN_PASSWORD=$GLASSFISH_PASSWORD" > $GLASSFISH_PASSWORD_FILE
+
+                DB_NAME_UPPER=`firstCharUpper $PAYMENT_DB_NAME`
+                $SUDO_COMMAND $AS_ADMIN_COMMAND create-jdbc-connection-pool --validationmethod auto-commit --datasourceclassname com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource --host $GLASSFISH_HOST --port 4848 --user $GLASSFISH_USER --passwordfile $GLASSFISH_PASSWORD_FILE --restype javax.sql.DataSource --isconnectvalidatereq=true --failconnection=true --nontransactionalconnections=true  --property serverName=$DB_HOST:portNumber=$DB_PORT:databaseName=$PAYMENT_DB_NAME:user=$PAYMENT_DB_USER:password=$PAYMENT_DB_PASSWORD --steadypoolsize 10 --idletimeout 120 --maxpoolsize 30 --description "PAYMENT" $PAYMENT_DB_NAME
+                $SUDO_COMMAND $AS_ADMIN_COMMAND create-jdbc-resource --connectionpoolid $PAYMENT_DB_NAME --host $GLASSFISH_HOST --port $GLASSFISH_PORT --user $GLASSFISH_USER --passwordfile $GLASSFISH_PASSWORD_FILE --description "$DB_NAME_UPPER" jdbc/$DB_NAME_UPPER
+
+                $AS_ADMIN_COMMAND create-auth-realm --classname com.sun.enterprise.security.auth.realm.ldap.LDAPRealm --host $GLASSFISH_HOST --port $GLASSFISH_PORT --user $GLASSFISH_USER --passwordfile $GLASSFISH_PASSWORD_FILE --property directory="ldap\://192.168.3.2\:389:base-dn=dc\=123,dc\=com,dc\=ve":jaas-context=ldapRealm ldap123
+                
+                $AS_ADMIN_COMMAND delete-http-listener --user $GLASSFISH_USER --passwordfile $GLASSFISH_PASSWORD_FILE --host $GLASSFISH_HOST --port $GLASSFISH_PORT http-listener-1
+                $AS_ADMIN_COMMAND delete-http-listener --user $GLASSFISH_USER --passwordfile $GLASSFISH_PASSWORD_FILE --host $GLASSFISH_HOST --port $GLASSFISH_PORT http-listener-2
+                $AS_ADMIN_COMMAND create-http-listener --listeneraddress 0.0.0.0 --listenerport 80 --defaultvs server --host $GLASSFISH_HOST --port $GLASSFISH_PORT --user $GLASSFISH_USER --passwordfile $GLASSFISH_PASSWORD_FILE alodiga-listener
+                $AS_ADMIN_COMMAND create-http-listener --listeneraddress 0.0.0.0 --listenerport 443 --defaultvs server --host $GLASSFISH_HOST --port $GLASSFISH_PORT --user $GLASSFISH_USER --passwordfile $GLASSFISH_PASSWORD_FILE --securityenabled=true alodiga-ssl-listener
+
+                $SUDO_COMMAND $AS_ADMIN_COMMAND set --host $GLASSFISH_HOST --port 4848 --user $GLASSFISH_USER --passwordfile $GLASSFISH_PASSWORD_FILE server-config.http-service.virtual-server.server.property.sso-enabled="true"
+                
+                #TODO: REALIZAR INVESTIGACIÓN SOBRE CONFIGURACIÓN DEL HOSTVIRTUAL
+                rm $GLASSFISH_PASSWORD_FILE
+                echo "DONE"
+	;;
+	"mysql")
+		echo "Configuring Database" 
+		echo "" > $TMP_FILE.sql
+		
+		echo "Creando BD " $PAYMENT_DB_NAME"\n"
+		echo "DROP DATABASE IF EXISTS \`$PAYMENT_DB_NAME\`;" >> $TMP_FILE.sql
+		echo "CREATE DATABASE \`$PAYMENT_DB_NAME\`;" >> $TMP_FILE.sql
+		echo "GRANT ALL ON \`$PAYMENT_DB_NAME\`.* TO '$PAYMENT_DB_USER'@'%' IDENTIFIED BY '$PAYMENT_DB_PASSWORD';" >> $TMP_FILE.sql
+		echo "GRANT ALL ON \`$PAYMENT_DB_NAME\`.* TO '$PAYMENT_DB_USER'@'localhost' IDENTIFIED BY '$PAYMENT_DB_PASSWORD';" >> $TMP_FILE.sql
+		echo "Se ha creado la BD" $PAYMENT_DB_NAME "Satisfactoriamente\n"
+
+		
+		echo "Asignando perminos a usuario\n" 		
+		echo "GRANT USAGE ON *.* TO '$PAYMENT_DB_USER'@'localhost';" >> $TMP_FILE.sql
+		echo "GRANT USAGE ON *.* TO '$PAYMENT_DB_USER'@'%';" >> $TMP_FILE.sql
+		echo "GRANT SUPER ON *.* TO '$PAYMENT_DB_USER'@'localhost';" >> $TMP_FILE.sql
+		echo "GRANT SUPER ON *.* TO '$PAYMENT_DB_USER'@'%';" >> $TMP_FILE.sql
+		echo "FLUSH PRIVILEGES;" >> $TMP_FILE.sql
+case $USE_SANDBOX in
+		"1")
+		$USE_COMMAND < $TMP_FILE.sql -h localhost --port=$DB_PORT --user=$DB_ROOT_USER --password=$DB_ROOT_PASSWORD --socket /tmp/mysql_sandbox3306.sock
+		rm $TMP_FILE.sql 	
+		
+		echo "Creating the database\n"
+        	echo "Corriendo payment.sql\n"
+		$USE_COMMAND < $PAYMENT_SRC_INSTALLER_DIR/db/payment.sql -h $DB_HOST --port=$DB_PORT --user=$PAYMENT_DB_USER --password=$PAYMENT_DB_PASSWORD
+		echo "Se ha corrido payment.sql de forma satisfactoria \n"
+		#echo "Corriendo payment_data.sql\n"
+		#$USE_COMMAND < $PAYMENT_SRC_INSTALLER_DIR/db/payment_data.sql -h $DB_HOST --port=$DB_PORT --user=$PAYMENT_DB_USER --password=$PAYMENT_DB_PASSWORD
+;;
+"0")
+		$SUDO_COMMAND /usr/local/mysql/bin/mysql < $TMP_FILE.sql -h 127.0.0.1 --port=$DB_PORT --user=$DB_ROOT_USER --password=$DB_ROOT_PASSWORD
+		rm $TMP_FILE.sql 	
+		
+		echo "Creating the database\n"
+        	echo "Corriendo payment.sql\n"
+		$SUDO_COMMAND /usr/local/mysql/bin/mysql < $PAYMENT_SRC_INSTALLER_DIR/db/payment.sql -h 127.0.0.1 --port=$DB_PORT --user=$PAYMENT_DB_USER --password=$PAYMENT_DB_PASSWORD
+		echo "Se ha corrido payment.sql de forma satisfactoria \n"
+		echo "Corriendo payment.sql\n"
+		$SUDO_COMMAND /usr/local/mysql/bin/mysql < $PAYMENT_SRC_INSTALLER_DIR/db/payment.sql -h 127.0.0.1 --port=$DB_PORT --user=$PAYMENT_DB_USER --password=$PAYMENT_DB_PASSWORD
+
+;;
+esac;
+		echo "Se ha corrido payment.sql de forma satisfactoria \n"
+		echo "DONE"
+	;;
+	"all")
+		payment system configure glassfish
+		payment system configure mysql
+	;;
+    *) 
+		echo "Unknown web module";
+	;;
+esac

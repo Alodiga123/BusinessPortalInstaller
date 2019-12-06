@@ -1,0 +1,16 @@
+#!/bin/sh
+
+webmodule=$1
+case $webmodule in
+        "PaymentWS")
+                echo disabling $1...
+                $AS_ADMIN_COMMAND disable --host $PAYMENT_HOSTNAME --port 4848 --user $GLASSFISH_USER --passwordfile $GLASSFISH_PASSWORD_FILE PaymentWS
+        ;;
+	"all")
+                payment-web-disable PaymentWS
+                echo "disabling all done!"
+        ;;
+	*)
+            echo "Unknown web module."
+        ;;
+esac

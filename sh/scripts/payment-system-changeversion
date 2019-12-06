@@ -1,0 +1,29 @@
+#!/bin/sh
+
+	newversion=$1
+	
+	if [ -n "$newversion" ]; then
+	
+		# Se puede reemplazar usando el comando
+		# 	find / -type l -name default | grep payment
+		# para recorrer las entradas que se encuentren y cambiarlas por la nueva version.
+		
+		echo "******* Updating symbolic links:"
+		$SUDO_COMMAND rm /usr/share/alodiga/payment/default
+		$SUDO_COMMAND ln -s /usr/share/alodiga/payment/$newversion /usr/share/alodiga/payment/default
+		
+		$SUDO_COMMAND rm /var/log/alodiga/payment/default
+		$SUDO_COMMAND ln -s /var/log/alodiga/payment/$newversion /var/log/alodiga/payment/default
+
+		$SUDO_COMMAND rm /usr/src/alodiga/payment/default
+		$SUDO_COMMAND ln -s /usr/src/alodiga/payment/$newversion /usr/src/alodiga/payment/default
+			
+		echo "******* Version Changed to: $newversion"
+		echo "Next list show if exists symbolic links broken"
+		$SUDO_COMMAND find / -maxdepth 6 -xtype l -name default  | grep payment
+	else 
+		echo "You have to specify the new version!"
+		echo "Usage: "
+		echo "\t payment system changeversion <newversion>"
+	fi
+	
